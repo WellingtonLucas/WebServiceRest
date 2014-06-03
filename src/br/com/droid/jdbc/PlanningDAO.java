@@ -3,19 +3,21 @@ package br.com.droid.jdbc;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import br.com.droid.model.Planning;
 
 public class PlanningDAO {
 
 	public void addPlanning(Connection con, Planning plan) {
-		String sql = "insert into planning (senha) values (?)";
-
-		try {
-			PreparedStatement stm = con.prepareStatement(sql);
-			stm.setString(1, plan.getSenha());
-			stm.close();
-		} catch (Exception e) {
+		String sql = "INSERT INTO planning(id,senha) VALUES (?,?)";
+		System.out.println(plan.getSenha());
+		try (PreparedStatement stm = con.prepareStatement(sql)){
+			
+			stm.setString(1, plan.getId());
+			stm.setString(2, plan.getSenha());
+			System.out.println(plan.getSenha()+" dentro do add");
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}

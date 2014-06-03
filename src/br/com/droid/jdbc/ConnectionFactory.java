@@ -5,12 +5,15 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
-	public Connection getConnection() {
-        try {
-            return DriverManager.getConnection("jdbc:postgresql://localhost:5432/planpoker", "postgres", "postgres");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public static Connection getConnection() {
+		try {
+
+			return DriverManager.getConnection(
+					"jdbc:postgresql://localhost:5432/planpoker", "postgres",
+					"postgres");
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 }
