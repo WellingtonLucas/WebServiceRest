@@ -1,0 +1,25 @@
+----------------------CONFIGURANDO BANCO-----------------------
+
+* Nome do banco: planpoker
+
+create table planning(
+	id varchar(8) NOT NULL,
+	senha varchar(20) NOT NULL,
+	PRIMARY KEY (id)
+	
+);
+
+create table item(
+	id serial primary key not null,
+	descricao varchar(100) NOT NULL,
+	id_planning varchar(8) NOT NULL,
+	FOREIGN KEY (id_planning) REFERENCES planning(id)	
+);
+
+create table voto(
+	id serial,
+	valor integer,	
+	id_item serial,	
+	PRIMARY KEY (id, id_item),	
+	FOREIGN KEY (id_item) REFERENCES item(id)	
+);
