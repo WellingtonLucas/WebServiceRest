@@ -17,6 +17,7 @@ public class VotoDAO {
 
 			stm.setInt(1, voto.getValor());
 			stm.setInt(2, voto.getId_item());
+			stm.execute();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -29,7 +30,7 @@ public class VotoDAO {
 
 		try (PreparedStatement stm = con.prepareStatement(sql)) {
 			stm.setInt(1, id_item);
-			ResultSet rs = stm.executeQuery(sql);
+			ResultSet rs = stm.executeQuery();
 			while (rs.next()) {
 				lista.add(new Voto(rs.getInt("id"), rs.getInt("valor"), rs
 						.getInt("id_item")));

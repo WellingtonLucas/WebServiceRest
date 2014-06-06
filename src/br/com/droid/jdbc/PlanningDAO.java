@@ -10,13 +10,14 @@ import br.com.droid.model.Planning;
 public class PlanningDAO {
 
 	public void addPlanning(Connection con, Planning plan) {
-		String sql = "INSERT INTO planning(id,senha) VALUES (?,?)";
-		System.out.println(plan.getSenha());
-		try (PreparedStatement stm = con.prepareStatement(sql)){
-			
+		String sql = "INSERT INTO planning(id,senha,duracao) VALUES (?,?,?)";
+		
+		try (PreparedStatement stm = con.prepareStatement(sql)) {
+
 			stm.setString(1, plan.getId());
 			stm.setString(2, plan.getSenha());
-			System.out.println(plan.getSenha()+" dentro do add");
+			stm.setString(3, plan.getDuracao());
+			stm.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -28,12 +29,15 @@ public class PlanningDAO {
 
 		try (PreparedStatement stm = con.prepareStatement(sql)) {
 			stm.setString(1, id);
-			ResultSet rs = stm.executeQuery(sql);
-			while (rs.next()) {
+			ResultSet rs = stm.executeQuery();
+			while (rs.next()) {				
 				plan.setId(rs.getString("id"));
 				plan.setSenha(rs.getString("senha"));
+				plan.setDuracao(rs.getString("duracao"));
 			}
+			rs.close();
 		} catch (Exception e) {
+			
 			e.printStackTrace();
 		}
 		return plan;

@@ -5,6 +5,7 @@
 create table planning(
 	id varchar(8) NOT NULL,
 	senha varchar(20) NOT NULL,
+	termino varchar(6) NOT NULL,
 	PRIMARY KEY (id)
 	
 );
