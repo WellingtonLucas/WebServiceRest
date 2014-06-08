@@ -19,40 +19,77 @@ import br.com.droid.model.Item;
 import br.com.droid.model.Planning;
 import br.com.droid.model.Voto;
 
-
 @Path("/planning")
 public class PlanningResource {
-	
+
+	@GET
+	@Path("/autenticar/{id}/{senha}")
+	@Produces("application/json")
+	public String autenticacao(@PathParam("id") String id,
+			@PathParam("senha") String senha) throws SQLException {
+		// pegar a senha do panning com esse id
+		Planning plan = Banco.getBancoInstance().buscarPlanning(id);
+		if (plan != null) {
+			if (senha == plan.getSenha()) {
+				return "autenticado";
+			}
+		}
+		return "reprovado";
+	}
+
 	@GET
 	@Path("/index")
 	@Produces("application/json")
-	public String teste() throws SQLException{
-		if(Banco.getBancoInstance() != null){
+	public String teste() throws SQLException {
+		if (Banco.getBancoInstance() != null) {
 			return "Tem banco";
 		}
 		return "n tem banco";
 	}
-	
 
-	
 	@GET
-	@Path("/itens/{id}")
+	@Path("/itens/{id}/{senha}/{hora}")
 	@Produces("application/json")
-	public ArrayList<Item> getItens(@PathParam("id") String id) throws SQLException{
+	public ArrayList<Item> getItens(@PathParam("id") String id,
+			@PathParam("senha") String senha, @PathParam("hora") String hora)
+			throws SQLException {
 		Planning p = Banco.getBancoInstance().buscarPlanning(id);
-		//System.out.println("server id: "+p.getId());
-		if(p == null){
-			throw new NoContentException("Planning não encontrado!");
+		if (senha.equals(p.getSenha())) {
+			if (!encerrado(p, hora)) {
+				// System.out.println("server id: "+p.getId());
+
+				ArrayList<Item> itens = Banco.getBancoInstance()
+						.buscarItens(id);
+				if (itens.isEmpty()) {
+					throw new NoContentException("Itens não existentes!");
+				}
+
+				return itens;
+			}
+			throw new NoContentException("encerrado");
+		} else {
+			throw new NoContentException("Senha inv�lida");
 		}
-		ArrayList<Item> itens = Banco.getBancoInstance().buscarItens(id);
-		if(itens.isEmpty()){
-			throw new NoContentException("Itens não existentes!");
-		}
-		
-		return itens;
+
 	}
-	
-	
+
+	private boolean encerrado(Planning p, String hora) {
+		String[] termino = p.getDuracao().split(":", 2);
+		String[] ho = hora.split(":", 2);
+
+		int term_hora = Integer.parseInt(termino[0]);
+		int term_min = Integer.parseInt(termino[1]);
+		int hora_hora = Integer.parseInt(ho[0]);
+		int hora_min = Integer.parseInt(ho[1]);
+
+		if (hora_hora > term_hora) {
+			return true;
+		} else if (hora_hora == term_hora && hora_min > term_min) {
+			return true;
+		}
+		return false;
+	}
+
 	@POST
 	@Path("/inserir")
 	@Produces("application/json")
@@ -62,39 +99,40 @@ public class PlanningResource {
 		Banco.getBancoInstance().inserirItens(cp.getItens());
 		return "Sucesso";
 	}
-	
+
 	@GET
 	@Path("/item/{id}/voto/{valor}")
-	@Produces("application/json")//precisa?
-	public void votar(@PathParam("id") String id, @PathParam("valor") int valor) throws SQLException{
-		
+	@Produces("application/json")
+	// precisa?
+	public void votar(@PathParam("id") String id, @PathParam("valor") int valor)
+			throws SQLException {
+
 		ArrayList<Item> itens = Banco.getBancoInstance().buscarItens(id);
-		if(itens.isEmpty()){
+		if (itens.isEmpty()) {
 			throw new NoContentException("Item não existente!");
-		}
-		else if(itens.size() == 1){
-			//inserir o voto com o valor e o id
+		} else if (itens.size() == 1) {
+			// inserir o voto com o valor e o id
 			Voto v = new Voto();
 			v.setId_item(Integer.parseInt(id));
 			v.setValor(valor);
 			Banco.getBancoInstance().inserirVoto(v);
-		}
-		else throw new NoContentException("Item não encontrado!");
-	}
-	
-	
-	/*
-	@GET
-	@Path("/buscarTodos")
-	@Produces("application/json")
-	public ArrayList<Planning> selTodos(){
-		return Banco.getBancoInstance().getListaPlanning();
+		} else
+			throw new NoContentException("Item não encontrado!");
 	}
 
-	@GET
-	@Path("/buscarTodosGSON")
-	@Produces("application/json")
-	public String selTodosGSON(){
-		return new Gson().toJson(Banco.getBancoInstance().getListaPlanning());
-	}*/
+	/*
+	 * @GET
+	 * 
+	 * @Path("/buscarTodos")
+	 * 
+	 * @Produces("application/json") public ArrayList<Planning> selTodos(){
+	 * return Banco.getBancoInstance().getListaPlanning(); }
+	 * 
+	 * @GET
+	 * 
+	 * @Path("/buscarTodosGSON")
+	 * 
+	 * @Produces("application/json") public String selTodosGSON(){ return new
+	 * Gson().toJson(Banco.getBancoInstance().getListaPlanning()); }
+	 */
 }

@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import br.com.droid.model.Item;
-import br.com.droid.model.Planning;
 import br.com.droid.model.Voto;
 
 public class Teste {

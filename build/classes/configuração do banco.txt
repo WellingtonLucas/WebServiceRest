@@ -1,4 +1,4 @@
-----------------------CONFIGURANDO BANCO-----------------------
+	----------------------CONFIGURANDO BANCO-----------------------
 
 * Nome do banco: planpoker
 
