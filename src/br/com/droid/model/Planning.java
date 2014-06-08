@@ -7,24 +7,24 @@ public class Planning {
 
 	private String id;
 	private String senha;
-	private String duracao;
+	private String termino;
 
 	public Planning() {
 
 	}
 
-	public Planning(String id, String senha, String duracao) {
+	public Planning(String id, String senha, String termino) {
 		this.id = id;
 		this.senha = senha;
-		this.duracao = duracao;
+		this.termino = termino;
 	}
 
-	public String getDuracao() {
-		return duracao;
+	public String getTermino() {
+		return termino;
 	}
 
-	public void setDuracao(String duracao) {
-		this.duracao = duracao;
+	public void setTermino(String termino) {
+		this.termino = termino;
 	}
 
 	public String getId() {

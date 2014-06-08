@@ -10,13 +10,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import com.google.gson.Gson;
-
 import br.com.droid.Banco;
 import br.com.droid.exception.NoContentException;
 import br.com.droid.model.CadastroPlanning;
 import br.com.droid.model.Item;
 import br.com.droid.model.Planning;
+import br.com.droid.model.ReceberPlanning;
 import br.com.droid.model.Voto;
 
 @Path("/planning")
@@ -48,34 +47,29 @@ public class PlanningResource {
 	}
 
 	@GET
-	@Path("/itens/{id}/{senha}/{hora}")
+	@Path("/itens/{id}/{hora}")
 	@Produces("application/json")
-	public ArrayList<Item> getItens(@PathParam("id") String id,
-			@PathParam("senha") String senha, @PathParam("hora") String hora)
-			throws SQLException {
+	public ReceberPlanning getItens(@PathParam("id") String id,
+			@PathParam("hora") String hora) throws SQLException{
 		Planning p = Banco.getBancoInstance().buscarPlanning(id);
-		if (senha.equals(p.getSenha())) {
-			if (!encerrado(p, hora)) {
-				// System.out.println("server id: "+p.getId());
-
-				ArrayList<Item> itens = Banco.getBancoInstance()
-						.buscarItens(id);
-				if (itens.isEmpty()) {
-					throw new NoContentException("Itens não existentes!");
-				}
-
-				return itens;
-			}
-			throw new NoContentException("encerrado");
-		} else {
-			throw new NoContentException("Senha inv�lida");
+		ReceberPlanning rePlan = new ReceberPlanning();
+		ArrayList<Item> itens = Banco.getBancoInstance().buscarItens(id);
+		
+		rePlan.setId(id);
+		if (!encerrado(p, hora)) {
+			// System.out.println("server id: "+p.getId());
+			rePlan.setEncerrado(false);			
+		}else{
+			rePlan.setEncerrado(true);
 		}
-
+		rePlan.setItens(itens);
+		return rePlan;
 	}
 
 	private boolean encerrado(Planning p, String hora) {
-		String[] termino = p.getDuracao().split(":", 2);
-		String[] ho = hora.split(":", 2);
+		System.out.println(p.getTermino());
+		String[] termino = p.getTermino().split(":");
+		String[] ho = hora.split(":");
 
 		int term_hora = Integer.parseInt(termino[0]);
 		int term_min = Integer.parseInt(termino[1]);
@@ -109,7 +103,7 @@ public class PlanningResource {
 
 		ArrayList<Item> itens = Banco.getBancoInstance().buscarItens(id);
 		if (itens.isEmpty()) {
-			throw new NoContentException("Item não existente!");
+			throw new NoContentException("Item nao existente!");
 		} else if (itens.size() == 1) {
 			// inserir o voto com o valor e o id
 			Voto v = new Voto();
@@ -117,7 +111,7 @@ public class PlanningResource {
 			v.setValor(valor);
 			Banco.getBancoInstance().inserirVoto(v);
 		} else
-			throw new NoContentException("Item não encontrado!");
+			throw new NoContentException("Item nao encontrado!");
 	}
 
 	/*

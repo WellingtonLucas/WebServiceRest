@@ -16,7 +16,7 @@ public class PlanningDAO {
 
 			stm.setString(1, plan.getId());
 			stm.setString(2, plan.getSenha());
-			stm.setString(3, plan.getDuracao());
+			stm.setString(3, plan.getTermino());
 			stm.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -33,7 +33,7 @@ public class PlanningDAO {
 			while (rs.next()) {				
 				plan.setId(rs.getString("id"));
 				plan.setSenha(rs.getString("senha"));
-				plan.setDuracao(rs.getString("duracao"));
+				plan.setTermino(rs.getString("duracao"));
 			}
 			rs.close();
 		} catch (Exception e) {

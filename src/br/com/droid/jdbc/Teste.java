@@ -17,13 +17,13 @@ public class Teste {
 			//planin.setId("4");
 			//planin.setDuracao("7");
 			//plan.addPlanning(con, planin);
-			System.out.println(plan.buscar(con, "2").getId());
+			System.out.println(plan.buscar(con, "1").getId());
 			//Item item = new Item();
 			//item.setDescricao("Cadastro de cliente");
 			//item.setId_plan("2");
 			ItemDAO it = new ItemDAO();
 			//it.addItem(con, item);
-			for (Item item2 : it.buscarItens(con, "2")) {
+			for (Item item2 : it.buscarItens(con, "1")) {
 				System.out.println(item2.getDescricao());
 			}
 			 //Voto voto = new Voto();

@@ -19,19 +19,12 @@ public class Banco {
 	private PlanningDAO planningDAO;
 	private ItemDAO itemDAO;
 	private VotoDAO votoDAO;
-	private Connection con;
+	
 
-	private Banco(){
+	private Banco() {
 		this.planningDAO = new PlanningDAO();
 		this.itemDAO = new ItemDAO();
 		this.votoDAO = new VotoDAO();
-		try {
-			this.con = new ConnectionFactory().getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 	}
 
 	public static Banco getBancoInstance() throws SQLException {
@@ -41,32 +34,83 @@ public class Banco {
 	}
 
 	public String inserirPlanning(Planning planning) {
-		planningDAO.addPlanning(con, planning);
+		try {
+			Connection con = new ConnectionFactory().getConnection();
+			planningDAO.addPlanning(con, planning);
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return "Planning inserido no banco com sucesso!";
 	}
 
 	public Planning buscarPlanning(String id) {
-		return planningDAO.buscar(con, id);
+		Planning pla = null;
+		try {
+			Connection con = new ConnectionFactory().getConnection();
+			pla = planningDAO.buscar(con, id);
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pla;
 	}
 
 	public ArrayList<Item> buscarItens(String id) {
-		return (ArrayList<Item>) itemDAO.buscarItens(con, id);
+		ArrayList<Item> lista = new ArrayList<>();
+		try {
+			Connection con = new ConnectionFactory().getConnection();
+			lista = (ArrayList<Item>) itemDAO.buscarItens(con, id);
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return lista;
 	}
 
 	public void inserirItens(ArrayList<Item> itensNovos) {
-		for (Item item : itensNovos) {
-			itemDAO.addItem(con, item);
+		try {
+			Connection con = new ConnectionFactory().getConnection();
+			for (Item item : itensNovos) {
+				itemDAO.addItem(con, item);
+			}
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}
 
 	public void inserirVoto(Voto v) {
-		votoDAO.addVoto(con, v);
+		try {
+			Connection con = new ConnectionFactory().getConnection();
+			votoDAO.addVoto(con, v);
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 
-	public int calcularTotal(int id_item) {
-		ArrayList<Voto> votos = (ArrayList<Voto>) votoDAO.buscarVotos(con,
-				id_item);
+	public int calcularTotal(int id_item){
+		ArrayList<Voto> votos = new ArrayList<>();
+		try {
+			Connection con = new ConnectionFactory().getConnection();
+			 votos = (ArrayList<Voto>) votoDAO.buscarVotos(con,
+					id_item);
+			
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int v1 = 0, v2 = 0, v3 = 0, v5 = 0, v8 = 0, v13 = 0, v21 = 0;
 		for (Voto voto : votos) {
 			if (voto.getValor() == 1) {
