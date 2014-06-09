@@ -7,11 +7,11 @@ public class Item {
 	
 	private String id_plan;
 	private int id;
-	private String descricao;
+	private String nome;
 	
-	public Item(int id, String descricao, String id_plan) {
+	public Item(int id, String nome, String id_plan) {
 		this.id_plan = id_plan;
-		this.descricao = descricao;
+		this.nome = nome;
 		this.id = id;
 	}
 	public Item() {
@@ -30,11 +30,11 @@ public class Item {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getDescricao() {
-		return descricao;
+	public String getNome() {
+		return nome;
 	}
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 	
 }

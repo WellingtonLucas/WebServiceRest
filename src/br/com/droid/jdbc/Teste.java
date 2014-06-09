@@ -24,7 +24,7 @@ public class Teste {
 			ItemDAO it = new ItemDAO();
 			//it.addItem(con, item);
 			for (Item item2 : it.buscarItens(con, "1")) {
-				System.out.println(item2.getDescricao());
+				System.out.println(item2.getNome());
 			}
 			 //Voto voto = new Voto();
 			 //voto.setId_item(1);

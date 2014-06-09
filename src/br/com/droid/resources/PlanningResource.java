@@ -90,6 +90,9 @@ public class PlanningResource {
 	@Consumes("application/json")
 	public String inserirPlanning(CadastroPlanning cp) throws SQLException {
 		Banco.getBancoInstance().inserirPlanning(cp.getP());
+		for (Item item : cp.getItens()) {
+			System.out.println("Inserindo planning com descricao-> "+item.getNome());
+		}
 		Banco.getBancoInstance().inserirItens(cp.getItens());
 		return "Sucesso";
 	}

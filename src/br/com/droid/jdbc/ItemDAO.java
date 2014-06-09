@@ -15,7 +15,7 @@ public class ItemDAO {
 
 		try (PreparedStatement stm = con.prepareStatement(sql)) {
 
-			stm.setString(1, item.getDescricao());
+			stm.setString(1, item.getNome());
 			stm.setString(2, item.getId_plan());
 			stm.execute();
 
