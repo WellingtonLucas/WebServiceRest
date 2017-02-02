@@ -1,8 +1,7 @@
-aplicacoes/cin_ufc/target
-aplicacoes/cin_ufc/.metadata
-aplicacoes/cin_ufc/.settings
-aplicacoes/cin_ufc/.classpath
-aplicacoes/cin_ufc/.project
+.metadata
+.settings
+.classpath
+.project
 *.project
 *.class
 *.jar
